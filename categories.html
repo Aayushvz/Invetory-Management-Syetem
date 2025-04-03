@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories - Inventory Management System</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <img
+            src="img/logo.png"
+            alt="Inventory Management System Logo"
+            class="sidebar-logo"
+          />
+          <h2 class="sidebar-title">Inventory System</h2>
+          <p class="sidebar-user" id="sidebarUser">Admin</p>
+        </div>
+        <div class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-tachometer-alt"></i></span>
+            <span class="menu-text">Dashboard</span>
+          </a>
+          <a href="inventory.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-boxes"></i></span>
+            <span class="menu-text">Inventory</span>
+          </a>
+          <a href="categories.html" class="menu-item active">
+            <span class="menu-icon"><i class="fas fa-tags"></i></span>
+            <span class="menu-text">Categories</span>
+          </a>
+          <a href="transactions.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-exchange-alt"></i></span>
+            <span class="menu-text">Transactions</span>
+          </a>
+          <a href="reports.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-chart-bar"></i></span>
+            <span class="menu-text">Reports</span>
+          </a>
+          <a href="#" class="menu-item" id="logoutBtn">
+            <span class="menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+            <span class="menu-text">Logout</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="header">
+          <h1 class="page-title">Categories</h1>
+          <div class="header-actions">
+            <button class="btn btn-primary" id="addCategoryBtn">
+              <i class="fas fa-plus"></i> Add Category
+            </button>
+          </div>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="data-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Items Count</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categoriesTable">
+              <!-- Dynamically populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div class="modal-overlay" id="categoryModal" style="display: none">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">Add Category</h3>
+          <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryForm">
+            <input type="hidden" id="categoryId" />
+            <div class="form-group">
+              <label for="categoryName">Category Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="categoryName"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="categoryDescription">Description</label>
+              <textarea
+                class="form-control"
+                id="categoryDescription"
+              ></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelCategoryBtn">
+            Cancel
+          </button>
+          <button class="btn btn-primary" id="saveCategoryBtn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/categories.js"></script>
+  </body>
+</html>

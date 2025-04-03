@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Inventory Management System</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <img
+            src="img/logo.png"
+            alt="Inventory Management System Logo"
+            class="sidebar-logo"
+          />
+          <h2 class="sidebar-title">Inventory System</h2>
+          <p class="sidebar-user" id="sidebarUser">Admin</p>
+        </div>
+        <div class="sidebar-menu">
+          <a href="dashboard.html" class="menu-item active">
+            <span class="menu-icon"><i class="fas fa-tachometer-alt"></i></span>
+            <span class="menu-text">Dashboard</span>
+          </a>
+          <a href="inventory.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-boxes"></i></span>
+            <span class="menu-text">Inventory</span>
+          </a>
+          <a href="categories.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-tags"></i></span>
+            <span class="menu-text">Categories</span>
+          </a>
+          <a href="transactions.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-exchange-alt"></i></span>
+            <span class="menu-text">Transactions</span>
+          </a>
+          <a href="reports.html" class="menu-item">
+            <span class="menu-icon"><i class="fas fa-chart-bar"></i></span>
+            <span class="menu-text">Reports</span>
+          </a>
+          <a href="#" class="menu-item" id="logoutBtn">
+            <span class="menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+            <span class="menu-text">Logout</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="header">
+          <h1 class="page-title">Dashboard</h1>
+          <div class="header-actions">
+            <div class="user-info" id="headerUser">Welcome, Admin</div>
+          </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-card-title">Total Items</div>
+            <div class="stat-card-value" id="totalItems">0</div>
+            <div class="stat-card-desc">Inventory items tracked</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-title">Low Stock</div>
+            <div class="stat-card-value" id="lowStockItems">0</div>
+            <div class="stat-card-desc">Items below reorder level</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-title">Out of Stock</div>
+            <div class="stat-card-value" id="outOfStockItems">0</div>
+            <div class="stat-card-desc">
+              Items that need immediate attention
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-title">Categories</div>
+            <div class="stat-card-value" id="totalCategories">0</div>
+            <div class="stat-card-desc">Product categories</div>
+          </div>
+        </div>
+
+        <!-- Recent Items -->
+        <div class="data-table">
+          <div class="table-header">
+            <h2 class="table-title">Recent Inventory Items</h2>
+            <div class="table-actions">
+              <a href="inventory.html" class="btn btn-primary">View All</a>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recentItemsTable">
+              <!-- Dynamically populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="data-table">
+          <div class="table-header">
+            <h2 class="table-title">Recent Transactions</h2>
+            <div class="table-actions">
+              <a href="transactions.html" class="btn btn-primary">View All</a>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Item</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>User</th>
+              </tr>
+            </thead>
+            <tbody id="recentTransactionsTable">
+              <!-- Dynamically populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
