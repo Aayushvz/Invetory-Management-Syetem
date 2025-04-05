@@ -38,7 +38,7 @@ a {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #636c70 0%, #a6b3bc 100%);
+  background: linear-gradient(135deg, #3d3d3d 0%, #939393 100%);
   padding: 20px;
 }
 
@@ -124,6 +124,10 @@ a {
 
 .btn-secondary:hover {
   background-color: #545b62;
+}
+
+#saveItemBtn{
+  height: 20px;
 }
 
 .error-message {
