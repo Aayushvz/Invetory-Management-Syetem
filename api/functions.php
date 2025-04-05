@@ -7,8 +7,10 @@ function send_response($status, $message, $data = null) {
         'data' => $data
     ];
     
-    // Clear any previous output
-    ob_clean();
+    // Clear any previous output if output buffering is active
+    if (ob_get_level() > 0) {
+        ob_clean();
+    }
     
     // Set JSON header
     header('Content-Type: application/json');

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert new user
             $stmt = $conn->prepare("INSERT INTO users (username, email, password, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$username, $email, $password, $fname, $lname, $role]);
+            $stmt->execute([$username, $email, $hashedPassword, $fname, $lname, $role]);
 
             echo json_encode(['status' => 'success', 'message' => 'Account created successfully']);
         } catch (PDOException $e) {

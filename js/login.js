@@ -16,26 +16,33 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // In a real application, you would make an AJAX request to a backend server
-      // For this demo, we'll use a simple check for the admin user created in the database
-      if (username === "admin" && password === "admin123") {
-        // Store user information in localStorage (in a real app, you would use a JWT token or session)
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: 1,
-            username: username,
-            role: "admin",
-            firstName: "Admin",
-            lastName: "User",
-          })
-        );
+      // Make API call to login endpoint
+      fetch("api/login.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            // Store user information in localStorage
+            localStorage.setItem("user", JSON.stringify(data.data));
 
-        // Redirect to dashboard
-        window.location.href = "dashboard.html";
-      } else {
-        showError("Invalid username or password");
-      }
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
+          } else {
+            showError(data.message || "Invalid username or password");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          showError("An error occurred during login. Please try again.");
+        });
     });
   }
 

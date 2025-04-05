@@ -1,6 +1,11 @@
 <?php
-// Include the configuration file
-require_once 'config.php';
+require_once 'functions.php';
+require_once '../config/database.php';
+
+// Set headers to allow cross-origin requests (for development)
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 // Only allow POST requests for login
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -15,40 +20,35 @@ if (!isset($data['username']) || !isset($data['password'])) {
     send_response('error', 'Username and password are required');
 }
 
-// Sanitize input
 $username = sanitize_input($data['username']);
-$password = $data['password']; // Password will be verified with password_verify
+$password = $data['password'];
 
-// Prepare the SQL query with parameterized statement to prevent SQL injection
-$stmt = $conn->prepare("SELECT user_id, username, password, email, first_name, last_name, role FROM users WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Check if user exists
-if ($result->num_rows === 0) {
-    send_response('error', 'Invalid username or password');
-}
-
-// Get user data
-$user = $result->fetch_assoc();
-
-// Verify password
-// In this demo, we're storing the password hash directly for the admin user
-// In a real application, you would use:
-// if (password_verify($password, $user['password'])) {
+// Check for hardcoded admin user first
 if ($username === 'admin' && $password === 'admin123') {
-    // Remove password from user data before sending response
-    unset($user['password']);
-    
-    // Add session handling if needed in a real application
-    
-    // Return success response with user data
-    send_response('success', 'Login successful', $user);
-} else {
-    send_response('error', 'Invalid username or password');
+    send_response('success', 'Login successful', [
+        'user_id' => 1,
+        'username' => 'admin',
+        'email' => 'admin@example.com',
+        'first_name' => 'Admin',
+        'last_name' => 'User',
+        'role' => 'admin'
+    ]);
 }
 
-// Close the statement and connection
-$stmt->close();
-$conn->close(); 
+try {
+    // Check for regular user in database
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password'])) {
+        // Remove password from user data before sending
+        unset($user['password']);
+        send_response('success', 'Login successful', $user);
+    } else {
+        send_response('error', 'Invalid username or password');
+    }
+} catch (PDOException $e) {
+    send_response('error', 'Database error: ' . $e->getMessage());
+}
+?> 
