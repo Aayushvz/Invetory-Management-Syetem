@@ -115,18 +115,18 @@ a {
 
 .btn-primary {
   background-color: #5400a8;
-  height: 50px;
+  height: 41.5px;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #a400b3;
+  background-color: #8b0284;
 }
 
 .btn-secondary {
   background-color: #1b1b1b;
   color: white;
-  height: 50px;
+  height: 41.5px;
   display: block;
   margin: 0 auto;
 }
