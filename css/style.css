@@ -38,7 +38,10 @@ a {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #3d3d3d 0%, #939393 100%);
+  background-image: url("../img/bg.jpg");
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(10px);
+  background-size: 100%;
   padding: 20px;
 }
 
@@ -59,12 +62,16 @@ a {
 }
 
 .login-form {
-  background-color: white;
+  /* background-color: white; */
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .slogin-form {
   background-color: white;
@@ -107,27 +114,25 @@ a {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #5400a8;
+  height: 50px;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #a400b3;
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: #1b1b1b;
   color: white;
+  height: 50px;
   display: block;
   margin: 0 auto;
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
-}
-
-#saveItemBtn{
-  height: 20px;
+  background-color: #343434;
 }
 
 .error-message {

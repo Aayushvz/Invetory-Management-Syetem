@@ -110,7 +110,30 @@
               </tr>
             </thead>
             <tbody id="inventoryTable">
-              <!-- Dynamically populated by JavaScript -->
+              <!-- Table rows will be dynamically added here -->
+              <tr>
+                <td>1</td>
+                <td>Sample Item</td>
+                <td>Electronics</td>
+                <td>10</td>
+                <td>₹100.00</td>
+                <td>5</td>
+                <td>Available</td>
+                <td class="table-controls">
+                  <button class="btn btn-small btn-view view-item" data-id="1">
+                    View
+                  </button>
+                  <button class="btn btn-small btn-edit edit-item" data-id="1">
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-small btn-delete delete-item"
+                    data-id="1"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -180,15 +203,6 @@
               <div class="form-col">
                 <label for="itemLocation">Location</label>
                 <input type="text" class="form-control" id="itemLocation" />
-              </div>
-              <div class="form-col">
-                <label for="itemStatus">Status</label>
-                <select class="form-control" id="itemStatus" required>
-                  <option value="available">Available</option>
-                  <option value="low_stock">Low Stock</option>
-                  <option value="out_of_stock">Out of Stock</option>
-                  <option value="discontinued">Discontinued</option>
-                </select>
               </div>
             </div>
           </form>

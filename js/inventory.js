@@ -147,9 +147,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Edit buttons
     const editButtons = document.querySelectorAll(".edit-item");
+    console.log("Found edit buttons:", editButtons.length);
     editButtons.forEach((button) => {
       button.addEventListener("click", function () {
+        console.log("Edit button clicked");
         const itemId = parseInt(this.getAttribute("data-id"));
+        console.log("Item ID to edit:", itemId);
         editItem(itemId);
       });
     });
@@ -196,13 +199,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Edit item
   function editItem(itemId) {
+    console.log("Editing item with ID:", itemId);
     modalTitle.textContent = "Edit Inventory Item";
 
     // Find the item by ID
     const item = inventoryItems.find(
       (item) => parseInt(item.item_id) === itemId
     );
-    if (!item) return;
+    console.log("Found item:", item);
+    if (!item) {
+      console.error("Item not found");
+      return;
+    }
 
     // Populate form with item data
     itemIdInput.value = item.item_id;
@@ -213,10 +221,20 @@ document.addEventListener("DOMContentLoaded", function () {
     itemPriceInput.value = parseFloat(item.unit_price).toFixed(2);
     itemReorderLevelInput.value = item.reorder_level;
     itemLocationInput.value = item.location || "";
-    itemStatusSelect.value = item.status;
 
     // Show modal
     modal.style.display = "flex";
+  }
+
+  // Function to determine status based on quantity and reorder level
+  function determineStatus(quantity, reorderLevel) {
+    if (quantity <= 0) {
+      return "out_of_stock";
+    } else if (quantity <= reorderLevel) {
+      return "low_stock";
+    } else {
+      return "available";
+    }
   }
 
   // Save item (add or update)
@@ -229,7 +247,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const unit_price = parseFloat(itemPriceInput.value);
     const reorder_level = parseInt(itemReorderLevelInput.value);
     const location = itemLocationInput.value;
-    const status = itemStatusSelect.value;
+
+    // Automatically determine status based on quantity and reorder level
+    const status = determineStatus(quantity, reorder_level);
 
     try {
       let response;
@@ -387,4 +407,17 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize the page
   populateCategoryOptions();
   fetchInventoryItems();
+
+  // Check if we're coming from dashboard with an edit parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const editItemId = urlParams.get("edit");
+  if (editItemId) {
+    // Wait for inventory items to be loaded
+    const checkItemsLoaded = setInterval(() => {
+      if (inventoryItems.length > 0) {
+        clearInterval(checkItemsLoaded);
+        editItem(parseInt(editItemId));
+      }
+    }, 100);
+  }
 });

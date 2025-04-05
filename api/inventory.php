@@ -139,6 +139,17 @@ function get_item($id) {
     send_response('success', 'Item retrieved successfully', $item);
 }
 
+// Function to determine status based on quantity and reorder level
+function determine_status($quantity, $reorder_level) {
+    if ($quantity <= 0) {
+        return 'out_of_stock';
+    } else if ($quantity <= $reorder_level) {
+        return 'low_stock';
+    } else {
+        return 'available';
+    }
+}
+
 // Function to create a new inventory item
 function create_item() {
     global $conn;
@@ -166,7 +177,10 @@ function create_item() {
     $unit_price = floatval($data['unit_price']);
     $reorder_level = isset($data['reorder_level']) ? intval($data['reorder_level']) : 10;
     $location = isset($data['location']) ? sanitize_input($data['location']) : '';
-    $status = isset($data['status']) ? sanitize_input($data['status']) : 'available';
+    
+    // Automatically determine status based on quantity and reorder level
+    $status = determine_status($quantity, $reorder_level);
+    
     $created_by = isset($data['created_by']) ? intval($data['created_by']) : 1; // Default to admin user
     
     error_log("Prepared data for insertion: " . print_r([
@@ -234,7 +248,9 @@ function update_item() {
     $unit_price = floatval($data['unit_price']);
     $reorder_level = isset($data['reorder_level']) ? intval($data['reorder_level']) : 10;
     $location = isset($data['location']) ? sanitize_input($data['location']) : '';
-    $status = isset($data['status']) ? sanitize_input($data['status']) : 'available';
+    
+    // Automatically determine status based on quantity and reorder level
+    $status = determine_status($quantity, $reorder_level);
     
     // Prepare the SQL query
     $stmt = $conn->prepare("UPDATE inventory_items SET 

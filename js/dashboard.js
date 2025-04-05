@@ -20,6 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  const userData = localStorage.getItem("user");
+  if (userData) {
+    const user = JSON.parse(userData);
+    const username = user.username;
+    const uname = "Welcome! ".concat(username);
+    document.getElementById("headerUser").innerText = uname;
+  }
+
   // Function to fetch transactions from the API
   async function fetchTransactions() {
     try {
@@ -107,13 +115,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>₹${parseFloat(item.unit_price).toFixed(2)}</td>
                 <td class="${statusClass}">${statusText}</td>
                 <td class="table-controls">
-                    <a href="inventory-view.html?id=${
+                    <a href="javascript:void(0)" class="btn btn-small btn-view view-item" data-id="${
                       item.item_id
-                    }" class="btn btn-small btn-view">View</a>
-                    <a href="inventory-edit.html?id=${
+                    }">View</a>
+                    <a href="javascript:void(0)" class="btn btn-small btn-edit edit-item" data-id="${
                       item.item_id
-                    }" class="btn btn-small btn-edit">Edit</a>
-                    <a href="javascript:void(0)" class="btn btn-small btn-delete" data-id="${
+                    }">Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-small btn-delete delete-item" data-id="${
                       item.item_id
                     }">Delete</a>
                 </td>
@@ -122,30 +130,89 @@ document.addEventListener("DOMContentLoaded", function () {
       tableBody.appendChild(row);
     });
 
-    // Add event listeners for delete buttons
-    const deleteButtons = document.querySelectorAll(".btn-delete");
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", async function () {
-        const itemId = this.getAttribute("data-id");
-        if (confirm("Are you sure you want to delete this item?")) {
-          try {
-            const response = await fetch(`api/inventory.php?id=${itemId}`, {
-              method: "DELETE",
-            });
-            const data = await response.json();
-            if (data.status === "success") {
-              await fetchInventoryItems(); // Refresh the data
-              alert("Item deleted successfully!");
-            } else {
-              alert(data.message || "Error deleting item");
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            alert("Error deleting item");
-          }
-        }
+    // Add event listeners for action buttons
+    addActionButtonListeners();
+  }
+
+  // Add event listeners for action buttons
+  function addActionButtonListeners() {
+    // View buttons
+    const viewButtons = document.querySelectorAll(".view-item");
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const itemId = parseInt(this.getAttribute("data-id"));
+        viewItem(itemId);
       });
     });
+
+    // Edit buttons
+    const editButtons = document.querySelectorAll(".edit-item");
+    editButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const itemId = parseInt(this.getAttribute("data-id"));
+        editItem(itemId);
+      });
+    });
+
+    // Delete buttons
+    const deleteButtons = document.querySelectorAll(".delete-item");
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const itemId = parseInt(this.getAttribute("data-id"));
+        deleteItem(itemId);
+      });
+    });
+  }
+
+  // View item details
+  function viewItem(itemId) {
+    const item = inventoryItems.find(
+      (item) => parseInt(item.item_id) === itemId
+    );
+    if (!item) return;
+
+    alert(`
+            Item Details:
+            
+            ID: ${item.item_id}
+            Name: ${item.name}
+            Description: ${item.description || "N/A"}
+            Category: ${item.category_name}
+            Quantity: ${item.quantity}
+            Unit Price: ₹${parseFloat(item.unit_price).toFixed(2)}
+            Reorder Level: ${item.reorder_level}
+            Location: ${item.location || "N/A"}
+            Status: ${item.status}
+        `);
+  }
+
+  // Edit item
+  function editItem(itemId) {
+    // Redirect to inventory page with edit mode
+    window.location.href = `inventory.html?edit=${itemId}`;
+  }
+
+  // Delete an item
+  async function deleteItem(itemId) {
+    if (!confirm("Are you sure you want to delete this item?")) return;
+
+    try {
+      const response = await fetch(`api/inventory.php?id=${itemId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+      if (data.status === "success") {
+        // Refresh the inventory items
+        await fetchInventoryItems();
+        alert("Item deleted successfully!");
+      } else {
+        alert(data.message || "Error deleting item");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error deleting item");
+    }
   }
 
   // Populate recent transactions table

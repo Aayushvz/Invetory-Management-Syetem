@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'functions.php';
 require_once '../config/database.php';
 
@@ -25,26 +26,36 @@ $password = $data['password'];
 
 // Check for hardcoded admin user first
 if ($username === 'admin' && $password === 'admin123') {
-    send_response('success', 'Login successful', [
+    $adminUser = [
         'user_id' => 1,
         'username' => 'admin',
         'email' => 'admin@example.com',
         'first_name' => 'Admin',
         'last_name' => 'User',
         'role' => 'admin'
-    ]);
+    ];
+    $_SESSION['user'] = $adminUser;
+    send_response('success', 'Login successful', $adminUser);
 }
 
 try {
     // Check for regular user in database
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, email, first_name, last_name, role FROM users WHERE username = ?");
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
-        // Remove password from user data before sending
-        unset($user['password']);
-        send_response('success', 'Login successful', $user);
+    if ($user) {
+        // Get the password hash separately
+        $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $passwordData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (password_verify($password, $passwordData['password'])) {
+            $_SESSION['user'] = $user;
+            send_response('success', 'Login successful', $user);
+        } else {
+            send_response('error', 'Invalid username or password');
+        }
     } else {
         send_response('error', 'Invalid username or password');
     }
