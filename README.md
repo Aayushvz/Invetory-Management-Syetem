@@ -97,4 +97,3 @@ inventory-management-system/
 - Barcode/QR code scanning
 - Email notifications for low stock
 - Export data to CSV/Excel
-- Multi-language support
